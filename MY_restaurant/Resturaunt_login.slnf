@@ -1,0 +1,8 @@
+{
+  "solution": {
+    "path": "MY_restaurant.slnx",
+    "projects": [
+      "MY_restaurant.csproj"
+    ]
+  }
+}
