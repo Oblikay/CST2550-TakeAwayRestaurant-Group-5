@@ -5,13 +5,158 @@ namespace Takeaway_restaurant
     class Program
     {
         static BinarySearchTree menuTree = new BinarySearchTree();
+        static DatabaseHelper database;
+        static OrderBST orderTree = new OrderBST();
+        static int nextOrderId = 1;
 
         static void Main(string[] args)
         {
-            LoadSampleData();
+            Console.Write("Enter database file path (or press Enter for default 'restaurant.db'): ");
+            string dbPath = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(dbPath))
+            {
+                dbPath = "restaurant.db";
+            }
+
+            database = new DatabaseHelper(dbPath);
+            database.InitialiseDatabase();
+            database.LoadMenuItems(menuTree);
+
+            // If database was empty, load sample data
+            if (menuTree.Count() == 0)
+            {
+                Console.WriteLine("No data found in database. Loading sample data...");
+                LoadSampleData();
+                database.SaveAllMenuItems(menuTree);
+            }
 
             bool running = true;
+            static void PlaceOrder()
+            {
+                Console.WriteLine("\n--- Place New Order ---");
 
+                Console.Write("Enter customer name: ");
+                string name = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    Console.WriteLine("Name cannot be empty.");
+                    return;
+                }
+
+                Console.Write("Enter phone number: ");
+                string phone = Console.ReadLine();
+
+                Console.Write("Enter delivery address: ");
+                string address = Console.ReadLine();
+
+                Order order = new Order(nextOrderId, name, phone, address);
+
+                bool addingItems = true;
+                while (addingItems)
+                {
+                    Console.WriteLine("\n--- Current Menu ---\n");
+                    menuTree.DisplayAll();
+
+                    Console.Write("\nEnter item ID to add (or 0 to finish): ");
+                    string input = Console.ReadLine();
+
+                    if (int.TryParse(input, out int itemId))
+                    {
+                        if (itemId == 0)
+                        {
+                            addingItems = false;
+                        }
+                        else
+                        {
+                            MenuItem item = menuTree.SearchById(itemId);
+                            if (item != null)
+                            {
+                                order.AddItem(item);
+                                Console.WriteLine($"Added '{item.Name}' to order. Current total: £{order.TotalPrice:F2}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Item not found. Try again.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input. Please enter a number.");
+                    }
+                }
+
+                if (order.ItemCount > 0)
+                {
+                    orderTree.Insert(order);
+                    Console.WriteLine($"\nOrder #{nextOrderId} placed successfully!");
+                    Console.WriteLine(order.ToString());
+                    nextOrderId++;
+                }
+                else
+                {
+                    Console.WriteLine("Order cancelled - no items added.");
+                }
+            }
+
+            static void ViewOrders()
+            {
+                Console.WriteLine("\n--- All Orders ---\n");
+                orderTree.DisplayAll();
+                Console.WriteLine($"Total orders: {orderTree.Count()}");
+            }
+
+            static void UpdateOrderStatus()
+            {
+                Console.Write("\nEnter Order ID: ");
+                string input = Console.ReadLine();
+
+                if (int.TryParse(input, out int orderId))
+                {
+                    Order order = orderTree.SearchById(orderId);
+                    if (order != null)
+                    {
+                        Console.WriteLine($"\nCurrent status: {order.Status}");
+                        Console.WriteLine("Select new status:");
+                        Console.WriteLine("  1. Pending");
+                        Console.WriteLine("  2. Preparing");
+                        Console.WriteLine("  3. Out for Delivery");
+                        Console.WriteLine("  4. Completed");
+                        Console.Write("Select: ");
+                        string statusChoice = Console.ReadLine();
+
+                        switch (statusChoice)
+                        {
+                            case "1":
+                                order.Status = "Pending";
+                                break;
+                            case "2":
+                                order.Status = "Preparing";
+                                break;
+                            case "3":
+                                order.Status = "Out for Delivery";
+                                break;
+                            case "4":
+                                order.Status = "Completed";
+                                break;
+                            default:
+                                Console.WriteLine("Invalid option.");
+                                return;
+                        }
+
+                        Console.WriteLine($"Order #{orderId} status updated to: {order.Status}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"No order found with ID: {orderId}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a number.");
+                }
+            }
             while (running)
             {
                 DisplayMainMenu();
@@ -34,7 +179,20 @@ namespace Takeaway_restaurant
                     case "5":
                         SearchByCategory();
                         break;
+                    case "6":
+                        PlaceOrder();
+                        break;
+                    case "7":
+                        ViewOrders();
+                        break;
+                    case "8":
+                        UpdateOrderStatus();
+                        break;
+                    case "9":
+                        SaveToDatabase();
+                        break;
                     case "0":
+                        SaveToDatabase();
                         running = false;
                         Console.WriteLine("\nThank you for using Takeaway Restaurant! Goodbye.");
                         break;
@@ -49,11 +207,15 @@ namespace Takeaway_restaurant
             Console.WriteLine("\n================");
             Console.WriteLine("TAKEAWAY RESTAURANT SYSTEM");
             Console.WriteLine("==================");
-            Console.WriteLine("1. view Full Menu");
-            Console.WriteLine("2. search Menu Item");
+            Console.WriteLine("1. View Full Menu");
+            Console.WriteLine("2. Search Menu Item");
             Console.WriteLine("3. Add Menu Item");
             Console.WriteLine("4. Remove Menu Item");
             Console.WriteLine("5. Search by Category");
+            Console.WriteLine("6. Place Order");
+            Console.WriteLine("7. View Orders");
+            Console.WriteLine("8. Update Order Status");
+            Console.WriteLine("9. Save to Database");
             Console.WriteLine("0. Exit");
             Console.WriteLine("==================");
             Console.Write("Select an option: ");
@@ -216,6 +378,11 @@ namespace Takeaway_restaurant
             menuTree.Insert(new MenuItem(3, "Chocolate Brownie", "Desserts", 4.99m, "Warm fudge brownie with ice cream"));
             menuTree.Insert(new MenuItem(12, "Cola", "Drinks", 1.99m, "330ml can of cola"));
             menuTree.Insert(new MenuItem(18, "Lemonade", "Drinks", 1.99m, "Freshly squeezed lemonade"));
+        }
+        static void SaveToDatabase()
+        {
+            database.SaveAllMenuItems(menuTree);
+            Console.WriteLine("Data saved successfully");
         }
     }
 }

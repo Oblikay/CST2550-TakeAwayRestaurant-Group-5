@@ -1,0 +1,22 @@
+﻿-- sql statements--
+--menuItems table for storing restaurant menu data--
+
+
+
+CREATE TABLE IF NOT EXISTS MenuItems (
+    Id INTEGER PRIMARY KEY,
+    Name TEXT NOT NULL,
+    Category TEXT NOT NULL,
+    Price REAL NOT NULL,
+    Description TEXT
+);
+
+-- Sample data insert statements
+INSERT INTO MenuItems (Id, Name, Category, Price, Description) VALUES (10, 'Spring Rolls', 'Starters', 4.50, 'Crispy vegetable spring rolls');
+INSERT INTO MenuItems (Id, Name, Category, Price, Description) VALUES (5, 'Garlic Bread', 'Starters', 3.50, 'Toasted bread with garlic butter');
+INSERT INTO MenuItems (Id, Name, Category, Price, Description) VALUES (15, 'Chicken Tikka Masala', 'Mains', 9.99, 'Creamy spiced chicken curry');
+INSERT INTO MenuItems (Id, Name, Category, Price, Description) VALUES (8, 'Fish and Chips', 'Mains', 8.50, 'Battered cod with thick-cut chips');
+INSERT INTO MenuItems (Id, Name, Category, Price, Description) VALUES (20, 'Margherita Pizza', 'Mains', 7.99, 'Classic tomato and mozzarella pizza');
+INSERT INTO MenuItems (Id, Name, Category, Price, Description) VALUES (3, 'Chocolate Brownie', 'Desserts', 4.99, 'Warm fudge brownie with ice cream');
+INSERT INTO MenuItems (Id, Name, Category, Price, Description) VALUES (12, 'Cola', 'Drinks', 1.99, '330ml can of cola');
+INSERT INTO MenuItems (Id, Name, Category, Price, Description) VALUES (18, 'Lemonade', 'Drinks', 1.99, 'Freshly squeezed lemonade');
