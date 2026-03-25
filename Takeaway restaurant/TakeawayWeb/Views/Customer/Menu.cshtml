@@ -1,0 +1,153 @@
+﻿@{
+    ViewData["Title"] = "Menu";
+    Layout = null;
+    var items = ViewBag.Items as MenuItem[];
+    var selected = ViewBag.SelectedCategory as string;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #3498db;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .navbar h2 {
+                margin: 0;
+            }
+
+            .navbar a {
+                color: #fff;
+                text-decoration: none;
+                margin-left: 20px;
+                font-size: 14px;
+            }
+
+                .navbar a:hover {
+                    text-decoration: underline;
+                }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            margin-bottom: 20px;
+        }
+
+            .filters a {
+                display: inline-block;
+                padding: 8px 18px;
+                background-color: #0f3460;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 20px;
+                margin-right: 8px;
+                font-size: 14px;
+            }
+
+                .filters a:hover, .filters a.active {
+                    background-color: #3498db;
+                }
+
+        .menu-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .menu-card {
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            width: calc(50% - 8px);
+        }
+
+            .menu-card h3 {
+                color: #3498db;
+                margin-bottom: 5px;
+            }
+
+            .menu-card .cat {
+                color: #aaa;
+                font-size: 12px;
+            }
+
+            .menu-card .price {
+                color: #2ecc71;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .menu-card .desc {
+                color: #ccc;
+                font-size: 13px;
+                margin-top: 8px;
+            }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Takeaway Restaurant</h2>
+        <div>
+            <a href="/Customer/Index">Home</a>
+            <a href="/Customer/Menu">Full Menu</a>
+            <a href="/Customer/Search">Search</a>
+            <a href="/Customer/Order">Place Order</a>
+            <a href="/Customer/MyOrders">My Orders</a>
+            <a href="/Account/Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Our Menu</h1>
+
+        <div class="filters">
+            <a href="/Customer/Menu?category=All" class="@(selected == null || selected == "All" ? "active" : "")">All</a>
+            <a href="/Customer/Menu?category=Starters" class="@(selected == "Starters" ? "active" : "")">Starters</a>
+            <a href="/Customer/Menu?category=Mains" class="@(selected == "Mains" ? "active" : "")">Mains</a>
+            <a href="/Customer/Menu?category=Desserts" class="@(selected == "Desserts" ? "active" : "")">Desserts</a>
+            <a href="/Customer/Menu?category=Drinks" class="@(selected == "Drinks" ? "active" : "")">Drinks</a>
+        </div>
+
+        <div class="menu-grid">
+            @if (items != null)
+            {
+                foreach (var item in items)
+                {
+                    <div class="menu-card">
+                        <h3>@item.Name</h3>
+                        <span class="cat">@item.Category</span>
+                        <p class="price">£@item.Price.ToString("F2")</p>
+                        <p class="desc">@item.Description</p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</body>
+</html>

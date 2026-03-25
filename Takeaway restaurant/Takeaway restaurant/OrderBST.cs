@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Takeaway_restaurant
+namespace TakeawayWeb
 {
     public class OrderNode
     {

@@ -1,0 +1,174 @@
+﻿@{
+    ViewData["Title"] = "My Orders";
+    Layout = null;
+    var orders = ViewBag.Orders as Order[];
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Orders</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #3498db;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .navbar h2 {
+                margin: 0;
+            }
+
+            .navbar a {
+                color: #fff;
+                text-decoration: none;
+                margin-left: 20px;
+                font-size: 14px;
+            }
+
+                .navbar a:hover {
+                    text-decoration: underline;
+                }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .order-card {
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+            .order-card h3 {
+                color: #3498db;
+                margin-bottom: 8px;
+            }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background-color: #f39c12;
+            color: #fff;
+        }
+
+        .status-preparing {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .status-delivery {
+            background-color: #9b59b6;
+            color: #fff;
+        }
+
+        .status-completed {
+            background-color: #2ecc71;
+            color: #fff;
+        }
+
+        .order-info {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .order-items {
+            margin-top: 10px;
+        }
+
+            .order-items span {
+                display: block;
+                color: #ccc;
+                font-size: 13px;
+            }
+
+        .total {
+            color: #2ecc71;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .no-orders {
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Takeaway Restaurant</h2>
+        <div>
+            <a href="/Customer/Index">Home</a>
+            <a href="/Customer/Menu">Full Menu</a>
+            <a href="/Customer/Search">Search</a>
+            <a href="/Customer/Order">Place Order</a>
+            <a href="/Customer/MyOrders">My Orders</a>
+            <a href="/Account/Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>My Orders</h1>
+
+        @if (orders == null || orders.Length == 0)
+        {
+            <p class="no-orders">You haven't placed any orders yet.</p>
+        }
+        else
+        {
+            foreach (var order in orders)
+            {
+                string statusClass = "status-pending";
+                if (order.Status == "Preparing") statusClass = "status-preparing";
+                else if (order.Status == "Out for Delivery") statusClass = "status-delivery";
+                else if (order.Status == "Completed") statusClass = "status-completed";
+
+                <div class="order-card">
+                    <h3>
+                        Order #@order.OrderId
+                        <span class="status @statusClass">@order.Status</span>
+                    </h3>
+                    <div class="order-info">
+                        <p>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+                        <p>@order.CustomerAddress</p>
+                    </div>
+                    <div class="order-items">
+                        @for (int i = 0; i < order.ItemCount; i++)
+                        {
+                            <span>- @order.ItemNames[i] (£@order.ItemPrices[i].ToString("F2"))</span>
+                        }
+                    </div>
+                    <p class="total">Total: £@order.TotalPrice.ToString("F2")</p>
+                </div>
+            }
+        }
+    </div>
+</body>
+</html>

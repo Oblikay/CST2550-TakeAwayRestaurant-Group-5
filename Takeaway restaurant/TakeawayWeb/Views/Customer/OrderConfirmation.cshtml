@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Order Confirmed";
+    Layout = null;
+    var order = ViewBag.Order as Order;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #3498db;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .navbar h2 {
+                margin: 0;
+            }
+
+            .navbar a {
+                color: #fff;
+                text-decoration: none;
+                margin-left: 20px;
+                font-size: 14px;
+            }
+
+                .navbar a:hover {
+                    text-decoration: underline;
+                }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            margin: 20px 0;
+        }
+
+        h1 {
+            color: #2ecc71;
+            margin-bottom: 10px;
+        }
+
+        .order-details {
+            background-color: #16213e;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+            .order-details p {
+                margin-bottom: 8px;
+                color: #ccc;
+            }
+
+            .order-details .item {
+                margin-left: 15px;
+                color: #aaa;
+            }
+
+        .total {
+            color: #2ecc71;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+            .btn:hover {
+                background-color: #2980b9;
+            }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Takeaway Restaurant</h2>
+        <div>
+            <a href="/Customer/Index">Home</a>
+            <a href="/Customer/Menu">Full Menu</a>
+            <a href="/Customer/Order">Place Order</a>
+            <a href="/Customer/MyOrders">My Orders</a>
+            <a href="/Account/Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="success-icon">&#10003;</div>
+        <h1>Order Placed!</h1>
+        <p>@ViewBag.Success</p>
+
+        @if (order != null)
+        {
+            <div class="order-details">
+                <p><strong>Order #@order.OrderId</strong></p>
+                <p>Name: @order.CustomerName</p>
+                <p>Phone: @order.CustomerPhone</p>
+                <p>Address: @order.CustomerAddress</p>
+                <p>Items:</p>
+                @for (int i = 0; i < order.ItemCount; i++)
+                {
+                    <p class="item">- @order.ItemNames[i] (£@order.ItemPrices[i].ToString("F2"))</p>
+                }
+                <p class="total">Total: £@order.TotalPrice.ToString("F2")</p>
+            </div>
+        }
+
+        <a href="/Customer/Index" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>
