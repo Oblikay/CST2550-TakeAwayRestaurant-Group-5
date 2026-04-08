@@ -151,5 +151,28 @@
             <button type="submit" class="btn">Add Item</button>
         </form>
     </div>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var id = document.querySelector('input[name="id"]').value;
+            var name = document.querySelector('input[name="name"]').value;
+            var price = document.querySelector('input[name="price"]').value;
+
+            if (parseInt(id) <= 0) {
+                e.preventDefault();
+                alert('Item ID must be a positive number.');
+                return;
+            }
+            if (name.trim().length < 2) {
+                e.preventDefault();
+                alert('Item name must be at least 2 characters.');
+                return;
+            }
+            if (parseFloat(price) <= 0) {
+                e.preventDefault();
+                alert('Price must be greater than £0.00.');
+                return;
+            }
+        });
+    </script>
 </body>
 </html>

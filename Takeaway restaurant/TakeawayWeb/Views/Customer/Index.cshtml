@@ -140,12 +140,13 @@
             <a href="/Customer/Search">Search</a>
             <a href="/Customer/Order">Place Order</a>
             <a href="/Customer/MyOrders">My Orders</a>
+            <a href="/Customer/AI">AI Assistant</a>
             <a href="/Account/Logout">Logout</a>
         </div>
     </div>
 
     <div class="container">
-        <h1>Welcome!</h1>
+        <h1>Welcome</h1>
         <p class="subtitle">What would you like to do today?</p>
 
         <div class="actions">
@@ -164,6 +165,10 @@
             <a href="/Customer/MyOrders" class="action-card">
                 <h3>My Orders</h3>
                 <p>Track your orders</p>
+                <a href="/Customer/MyOrders" class="action-card">
+                    <h3>@ViewBag.OrderCount Orders</h3>
+                    <p>View your order history</p>
+                </a>
             </a>
         </div>
 

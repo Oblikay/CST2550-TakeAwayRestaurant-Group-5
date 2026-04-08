@@ -23,6 +23,13 @@ namespace TakeawayWeb.Controllers
             if (!IsAdmin()) return RedirectToAction("Login", "Account");
             ViewBag.MenuCount = _menuTree.Count();
             ViewBag.OrderCount = _orderTree.Count();
+            Order[] allOrders = _orderTree.GetAllOrders();
+            int pendingCount = 0;
+            for (int i = 0; i < allOrders.Length; i++)
+            {
+                if (allOrders[i].Status == "Pending") pendingCount++;
+            }
+            ViewBag.PendingCount = pendingCount;
             return View();
         }
 
@@ -90,6 +97,8 @@ namespace TakeawayWeb.Controllers
             if (order != null)
             {
                 order.Status = status;
+                var db = new DatabaseHelper("restaurant.db");
+                db.UpdateOrderStatus(orderId, status);
             }
 
             return RedirectToAction("Orders");

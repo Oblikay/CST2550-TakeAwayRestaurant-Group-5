@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "AI Assistant";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Assistant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background-color: #1a1a2e; color: #fff; }
+        .navbar {
+            background-color: #3498db;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h2 { margin: 0; }
+        .navbar a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 14px; }
+        .navbar a:hover { text-decoration: underline; }
+        .container { max-width: 700px; margin: 30px auto; padding: 0 20px; }
+        h1 { margin-bottom: 5px; }
+        .subtitle { color: #aaa; margin-bottom: 20px; font-size: 14px; }
+        .chat-box {
+            background-color: #16213e;
+            border-radius: 10px;
+            height: 450px;
+            overflow-y: auto;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .message { margin-bottom: 15px; max-width: 80%; }
+        .message.user { margin-left: auto; text-align: right; }
+        .message .bubble {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+        .message.bot .bubble { background-color: #0f3460; color: #fff; }
+        .message.user .bubble { background-color: #3498db; color: #fff; }
+        .message .label { font-size: 11px; color: #666; margin-bottom: 3px; }
+        .input-area { display: flex; gap: 10px; }
+        .input-area input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #0f3460;
+            color: #fff;
+            font-size: 14px;
+        }
+        .input-area input:focus { outline: none; border-color: #3498db; }
+        .input-area button {
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .input-area button:hover { background-color: #2980b9; }
+        .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .suggestions button {
+            padding: 6px 14px;
+            background-color: #0f3460;
+            color: #aaa;
+            border: 1px solid #333;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .suggestions button:hover { background-color: #3498db; color: #fff; border-color: #3498db; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Takeaway Restaurant</h2>
+        <div>
+            <a href="/Customer/Index">Home</a>
+            <a href="/Customer/Menu">Full Menu</a>
+            <a href="/Customer/Search">Search</a>
+            <a href="/Customer/Order">Place Order</a>
+            <a href="/Customer/MyOrders">My Orders</a>
+            <a href="/Customer/AI">AI Assistant</a>
+            <a href="/Account/Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>AI Assistant</h1>
+        <p class="subtitle">Ask me anything about our menu, prices, or recommendations!</p>
+
+        <div class="suggestions">
+            <button onclick="sendSuggestion('Show me the menu')">Show menu</button>
+            <button onclick="sendSuggestion('Show me starters')">Starters</button>
+            <button onclick="sendSuggestion('Show me mains')">Mains</button>
+            <button onclick="sendSuggestion('Show me desserts')">Desserts</button>
+            <button onclick="sendSuggestion('Recommend something')">Recommend</button>
+            <button onclick="sendSuggestion('What is the cheapest item?')">Cheapest</button>
+            <button onclick="sendSuggestion('Find chicken')">Find chicken</button>
+            <button onclick="sendSuggestion('Help')">Help</button>
+        </div>
+
+        <div class="chat-box" id="chatBox">
+            <div class="message bot">
+                <div class="label">AI Assistant</div>
+                <div class="bubble">Hello! I'm your AI assistant. I can help you browse our menu, find items, check prices, and get recommendations. Type 'help' to see everything I can do!</div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Type your message..." onkeydown="if(event.key==='Enter') sendMessage()" />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendSuggestion(text) {
+            document.getElementById('userInput').value = text;
+            sendMessage();
+        }
+
+        function sendMessage() {
+            var input = document.getElementById('userInput');
+            var message = input.value.trim();
+            if (!message) return;
+
+            var chatBox = document.getElementById('chatBox');
+
+            chatBox.innerHTML += '<div class="message user"><div class="label">You</div><div class="bubble">' + message + '</div></div>';
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            fetch('/AI/Chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                var reply = data.reply.replace(/\n/g, '<br>');
+                chatBox.innerHTML += '<div class="message bot"><div class="label">AI Assistant</div><div class="bubble">' + reply + '</div></div>';
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(function() {
+                chatBox.innerHTML += '<div class="message bot"><div class="label">AI Assistant</div><div class="bubble">Sorry, something went wrong. Please try again.</div></div>';
+            });
+        }
+    </script>
+</body>
+</html>

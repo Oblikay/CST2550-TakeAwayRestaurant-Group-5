@@ -12,6 +12,16 @@ namespace TakeawayWeb.Controllers
         {
             _menuTree = menuTree;
             _orderTree = orderTree;
+
+            // Set next order ID based on existing orders
+            Order[] existing = _orderTree.GetAllOrders();
+            for (int i = 0; i < existing.Length; i++)
+            {
+                if (existing[i].OrderId >= _nextOrderId)
+                {
+                    _nextOrderId = existing[i].OrderId + 1;
+                }
+            }
         }
 
         private bool IsCustomer()
@@ -23,6 +33,8 @@ namespace TakeawayWeb.Controllers
         {
             if (!IsCustomer()) return RedirectToAction("Login", "Account");
             ViewBag.Items = _menuTree.GetAllItems();
+            ViewBag.OrderCount = _orderTree.Count();
+
             return View();
         }
 
@@ -137,6 +149,8 @@ namespace TakeawayWeb.Controllers
             if (order.ItemCount > 0)
             {
                 _orderTree.Insert(order);
+                var db = new DatabaseHelper("restaurant.db");
+                db.SaveOrder(order);
                 _nextOrderId++;
                 ViewBag.Success = $"Order #{order.OrderId} placed successfully! Total: £{order.TotalPrice:F2}";
                 ViewBag.Order = order;
@@ -152,6 +166,12 @@ namespace TakeawayWeb.Controllers
         {
             if (!IsCustomer()) return RedirectToAction("Login", "Account");
             ViewBag.Orders = _orderTree.GetAllOrders();
+            return View();
+        }
+
+        public IActionResult AI()
+        {
+            if (!IsCustomer()) return RedirectToAction("Login", "Account");
             return View();
         }
     }
