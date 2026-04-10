@@ -6,12 +6,18 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddSingleton<BinarySearchTree>();
 builder.Services.AddSingleton<OrderBST>();
+builder.Services.AddSingleton<DatabaseHelper>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var path = config["DatabasePath"] ?? "restaurant.db";
+    return new DatabaseHelper(path);
+});
 
 var app = builder.Build();
 
 var menuTree = app.Services.GetRequiredService<BinarySearchTree>();
-var dbHelper = new DatabaseHelper("restaurant.db");
-dbHelper.InitialiseDatabase();
+var dbPath = app.Configuration["DatabasePath"] ?? "restaurant.db";
+var dbHelper = new DatabaseHelper(dbPath); dbHelper.InitialiseDatabase();
 dbHelper.LoadMenuItems(menuTree);
 
 dbHelper.InitialiseOrdersTable();
@@ -53,7 +59,7 @@ if (menuTree.Count() == 0)
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
-
+ 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");

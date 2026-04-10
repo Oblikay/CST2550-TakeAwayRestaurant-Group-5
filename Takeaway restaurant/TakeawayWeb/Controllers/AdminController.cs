@@ -6,11 +6,15 @@ namespace TakeawayWeb.Controllers
     {
         private readonly BinarySearchTree _menuTree;
         private readonly OrderBST _orderTree;
+        private readonly DatabaseHelper _db;
 
-        public AdminController(BinarySearchTree menuTree, OrderBST orderTree)
+
+        public AdminController(BinarySearchTree menuTree, OrderBST orderTree, DatabaseHelper db)
         {
             _menuTree = menuTree;
             _orderTree = orderTree;
+            _db = db;
+
         }
 
         private bool IsAdmin()
@@ -60,9 +64,8 @@ namespace TakeawayWeb.Controllers
             MenuItem item = new MenuItem(id, name, category, price, description ?? "");
             _menuTree.Insert(item);
 
-            var db = new DatabaseHelper("restaurant.db");
-            db.SaveAllMenuItems(_menuTree);
-
+            _db.SaveAllMenuItems(_menuTree);
+ 
             ViewBag.Success = $"'{name}' has been added to the menu!";
             return View();
         }
@@ -74,9 +77,8 @@ namespace TakeawayWeb.Controllers
             bool removed = _menuTree.Delete(id);
             if (removed)
             {
-                var db = new DatabaseHelper("restaurant.db");
-                db.SaveAllMenuItems(_menuTree);
-            }
+                _db.SaveAllMenuItems(_menuTree);
+             }
 
             return RedirectToAction("Menu");
         }
@@ -97,8 +99,8 @@ namespace TakeawayWeb.Controllers
             if (order != null)
             {
                 order.Status = status;
-                var db = new DatabaseHelper("restaurant.db");
-                db.UpdateOrderStatus(orderId, status);
+                _db.SaveAllMenuItems(_menuTree);
+                _db.UpdateOrderStatus(orderId, status);
             }
 
             return RedirectToAction("Orders");

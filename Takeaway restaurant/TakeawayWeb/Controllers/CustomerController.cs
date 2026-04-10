@@ -6,14 +6,15 @@ namespace TakeawayWeb.Controllers
     {
         private readonly BinarySearchTree _menuTree;
         private readonly OrderBST _orderTree;
+        private readonly DatabaseHelper _db;
         private static int _nextOrderId = 1;
 
-        public CustomerController(BinarySearchTree menuTree, OrderBST orderTree)
+        public CustomerController(BinarySearchTree menuTree, OrderBST orderTree, DatabaseHelper db)
         {
             _menuTree = menuTree;
             _orderTree = orderTree;
+            _db = db;
 
-            // Set next order ID based on existing orders
             Order[] existing = _orderTree.GetAllOrders();
             for (int i = 0; i < existing.Length; i++)
             {
@@ -149,8 +150,7 @@ namespace TakeawayWeb.Controllers
             if (order.ItemCount > 0)
             {
                 _orderTree.Insert(order);
-                var db = new DatabaseHelper("restaurant.db");
-                db.SaveOrder(order);
+                _db.SaveOrder(order);
                 _nextOrderId++;
                 ViewBag.Success = $"Order #{order.OrderId} placed successfully! Total: £{order.TotalPrice:F2}";
                 ViewBag.Order = order;
