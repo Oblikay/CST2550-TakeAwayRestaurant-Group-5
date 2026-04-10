@@ -14,5 +14,11 @@ obj/
 [Dd]ebug/
 [Rr]elease/
 
-## Screenshots (not needed in repo)
+## Database files
+*.db
+
+## Lab folders
+lab 8/
+
+## Screenshots
 screenshots/
