@@ -62,10 +62,6 @@ CST2550-TakeAwayRestaurant-Group-5/
 │       ├── MSTestSettings.cs             ← Test configuration
 │       └── TakeAayRestaurant.tests.csproj← Test project file
 │
-├── MY_restaurant/                        ← WinForms login page (earlier prototype)
-│   ├── frmlogin.cs                       ← Login form logic
-│   └── frmlogin.Designer.cs              ← Login form UI design
-│
 ├── screenshots/                          ← Diagrams and flowcharts
 │   ├── Flowcharts/
 │   │   ├── Flowchart.png                 ← Overall system flowchart
