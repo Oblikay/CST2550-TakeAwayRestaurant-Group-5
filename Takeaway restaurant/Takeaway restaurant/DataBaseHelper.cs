@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Data.Sqlite;
 
-namespace Takeaway_restaurant
+namespace TakeawayWeb
 {
     public class DatabaseHelper
     {

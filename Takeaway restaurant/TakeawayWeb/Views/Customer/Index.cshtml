@@ -1,0 +1,195 @@
+﻿@{
+    ViewData["Title"] = "Customer Dashboard";
+    Layout = null;
+    var items = ViewBag.Items as MenuItem[];
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Takeaway Restaurant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #3498db;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .navbar h2 {
+                margin: 0;
+            }
+
+            .navbar a {
+                color: #fff;
+                text-decoration: none;
+                margin-left: 20px;
+                font-size: 14px;
+            }
+
+                .navbar a:hover {
+                    text-decoration: underline;
+                }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background-color: #16213e;
+            padding: 25px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+            .action-card:hover {
+                background-color: #0f3460;
+            }
+
+            .action-card h3 {
+                color: #3498db;
+                margin-bottom: 8px;
+            }
+
+            .action-card p {
+                color: #aaa;
+                font-size: 13px;
+            }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+
+        .menu-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .menu-item {
+            background-color: #16213e;
+            padding: 15px;
+            border-radius: 8px;
+            width: calc(50% - 8px);
+        }
+
+            .menu-item h4 {
+                color: #3498db;
+            }
+
+            .menu-item .price {
+                color: #2ecc71;
+                font-weight: bold;
+            }
+
+            .menu-item .cat {
+                color: #aaa;
+                font-size: 12px;
+            }
+
+            .menu-item .desc {
+                color: #ccc;
+                font-size: 13px;
+                margin-top: 5px;
+            }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Takeaway Restaurant</h2>
+        <div>
+            <a href="/Customer/Index">Home</a>
+            <a href="/Customer/Menu">Full Menu</a>
+            <a href="/Customer/Search">Search</a>
+            <a href="/Customer/Order">Place Order</a>
+            <a href="/Customer/MyOrders">My Orders</a>
+            <a href="/Customer/AI">AI Assistant</a>
+            <a href="/Account/Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Welcome</h1>
+        <p class="subtitle">What would you like to do today?</p>
+
+        <div class="actions">
+            <a href="/Customer/Menu" class="action-card">
+                <h3>Browse Menu</h3>
+                <p>View all our delicious food</p>
+            </a>
+            <a href="/Customer/Search" class="action-card">
+                <h3>Search</h3>
+                <p>Find a specific item</p>
+            </a>
+            <a href="/Customer/Order" class="action-card">
+                <h3>Place Order</h3>
+                <p>Order your favourites</p>
+            </a>
+            <a href="/Customer/MyOrders" class="action-card">
+                <h3>My Orders</h3>
+                <p>Track your orders</p>
+                <a href="/Customer/MyOrders" class="action-card">
+                    <h3>@ViewBag.OrderCount Orders</h3>
+                    <p>View your order history</p>
+                </a>
+            </a>
+        </div>
+
+        <h2>Popular Items</h2>
+        <div class="menu-grid">
+            @if (items != null)
+            {
+                int count = 0;
+                foreach (var item in items)
+                {
+                    if (count >= 4) break;
+                    <div class="menu-item">
+                        <h4>@item.Name</h4>
+                        <span class="cat">@item.Category</span>
+                        <span class="price"> — £@item.Price.ToString("F2")</span>
+                        <p class="desc">@item.Description</p>
+                    </div>
+                    count++;
+                }
+            }
+        </div>
+    </div>
+</body>
+</html>

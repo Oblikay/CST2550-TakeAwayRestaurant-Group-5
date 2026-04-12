@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Takeaway restaurant", "Take
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeAayRestaurant.tests", "TakeAayRestaurant.tests\TakeAayRestaurant.tests.csproj", "{837550BE-9102-4605-806E-40BC085BA57F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeawayWeb", "TakeawayWeb\TakeawayWeb.csproj", "{9E7A705D-CE70-44BF-9A00-0AE60E2F46BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{837550BE-9102-4605-806E-40BC085BA57F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{837550BE-9102-4605-806E-40BC085BA57F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{837550BE-9102-4605-806E-40BC085BA57F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E7A705D-CE70-44BF-9A00-0AE60E2F46BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E7A705D-CE70-44BF-9A00-0AE60E2F46BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E7A705D-CE70-44BF-9A00-0AE60E2F46BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E7A705D-CE70-44BF-9A00-0AE60E2F46BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

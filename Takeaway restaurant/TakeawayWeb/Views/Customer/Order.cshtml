@@ -1,0 +1,215 @@
+﻿@{
+    ViewData["Title"] = "Place Order";
+    Layout = null;
+    var items = ViewBag.Items as MenuItem[];
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Place Order</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #3498db;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .navbar h2 {
+                margin: 0;
+            }
+
+            .navbar a {
+                color: #fff;
+                text-decoration: none;
+                margin-left: 20px;
+                font-size: 14px;
+            }
+
+                .navbar a:hover {
+                    text-decoration: underline;
+                }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            margin-bottom: 15px;
+        }
+
+        .error {
+            color: #e94560;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                color: #ccc;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #333;
+                border-radius: 5px;
+                background-color: #0f3460;
+                color: #fff;
+                font-size: 14px;
+            }
+
+        .menu-select {
+            margin: 20px 0;
+        }
+
+        .menu-item-row {
+            background-color: #16213e;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .menu-item-row label {
+                cursor: pointer;
+                flex: 1;
+            }
+
+            .menu-item-row input[type="checkbox"] {
+                margin-right: 10px;
+                width: 18px;
+                height: 18px;
+            }
+
+        .price-tag {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            .btn:hover {
+                background-color: #27ae60;
+            }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Takeaway Restaurant</h2>
+        <div>
+            <a href="/Customer/Index">Home</a>
+            <a href="/Customer/Menu">Full Menu</a>
+            <a href="/Customer/Search">Search</a>
+            <a href="/Customer/Order">Place Order</a>
+            <a href="/Customer/MyOrders">My Orders</a>
+            <a href="/Customer/AI">AI Assistant</a>
+
+            <a href="/Account/Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Place Your Order</h1>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error">@ViewBag.Error</div>
+        }
+
+        <form method="post" asp-action="PlaceOrder" id="orderForm">
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" name="customerName" required />
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" name="customerPhone" />
+            </div>
+            <div class="form-group">
+                <label>Delivery Address</label>
+                <input type="text" name="customerAddress" />
+            </div>
+
+            <h2>Select Items</h2>
+            <div class="menu-select">
+                @if (items != null)
+                {
+                    foreach (var item in items)
+                    {
+                        <div class="menu-item-row">
+                            <label>
+                                <input type="checkbox" class="item-check" value="@item.Id" />
+                                @item.Name (@item.Category)
+                            </label>
+                            <span class="price-tag">£@item.Price.ToString("F2")</span>
+                        </div>
+                    }
+                }
+            </div>
+
+            <input type="hidden" name="selectedItems" id="selectedItems" />
+            <button type="submit" class="btn" onclick="return collectItems()">Place Order</button>
+        </form>
+    </div>
+
+    <script>
+        function collectItems() {
+            var checks = document.querySelectorAll('.item-check:checked');
+            var name = document.querySelector('input[name="customerName"]').value;
+            var address = document.querySelector('input[name="customerAddress"]').value;
+
+            if (name.trim().length < 2) {
+                alert('Please enter your name.');
+                return false;
+            }
+            if (address.trim().length < 5) {
+                alert('Please enter a valid delivery address.');
+                return false;
+            }
+            if (checks.length === 0) {
+                alert('Please select at least one item.');
+                return false;
+            }
+
+            var ids = [];
+            for (var i = 0; i < checks.length; i++) {
+                ids.push(checks[i].value);
+            }
+            document.getElementById('selectedItems').value = ids.join(',');
+            return true;
+        }
+    </script>
+</body>
+</html>
