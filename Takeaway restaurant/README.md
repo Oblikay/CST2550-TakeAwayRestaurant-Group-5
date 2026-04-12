@@ -1,101 +1,120 @@
-# CST2550 - Takeaway Restaurant System (Group 5)
+# CST2550 – Takeaway Restaurant Management System
+### Group 5 | Middlesex University Mauritius
 
-## About
-A console-based Takeaway Restaurant ordering system built in C# .NET. The application uses a custom Binary Search Tree (BST) data structure to store and manage menu items and orders, with SQLite database integration for persistent storage.
+---
 
-## Team Members
-- **Team Leader (Scrum Master):** [Name]
-- **Secretary:** [Name]
-- **Developer:** Nigel
-- **Developer:** [Name]
-- **Tester:** [Name]
+## How to Run the Application
 
-## Prerequisites
-Before running this project, make sure you have the following installed:
+1. Open Visual Studio
+2. Navigate to `Takeaway restaurant/TakeawayWeb/`
+3. Open `TakeawayWeb.csproj`
+4. Press **F5** or click **Run** to start the web application
+5. When prompted, enter the database file path (or press Enter to use the default `restaurant.db`)
+6. The app will open in your browser — log in as Admin or Customer to use the system
 
-1. **Visual Studio 2022** (Community edition is free)
-   - Download: https://visualstudio.microsoft.com/downloads/
-   - During installation, select the **".NET desktop development"** workload
+> **Default login credentials:**
+> - Admin: username `admin`, password `admin`
+> - Customer: username `customer`, password `customer`
+> *(Update these if your actual credentials differ)*
 
-2. **.NET 8.0 SDK** (usually included with Visual Studio)
-   - Download: https://dotnet.microsoft.com/download/dotnet/8.0
+---
 
-3. **Git** (for cloning the repository)
-   - Download: https://git-scm.com/download/win
-
-## How to Clone and Run
-
-### Step 1: Clone the Repository
-Open a command prompt and run:
-```
-git clone https://github.com/Oblikay/CST2550-TakeAwayRestaurant-Group-5.git
-```
-
-### Step 2: Open in Visual Studio
-1. Open Visual Studio 2022
-2. Click **"Open a project or solution"**
-3. Navigate to the cloned folder and open the `.sln` file (e.g., `Takeaway restaurant.sln`)
-
-### Step 3: Install NuGet Packages
-The project uses SQLite for database operations. If the packages don't restore automatically:
-1. Go to **Tools → NuGet Package Manager → Manage NuGet Packages for Solution**
-2. Click the **"Restore"** button at the top, OR
-3. Search for **Microsoft.Data.Sqlite** → Install it for the main project
-
-### Step 4: Build and Run
-1. Press **Ctrl + Shift + B** to build the solution
-2. Press **F5** to run the application
-3. When prompted, press **Enter** to use the default database file (`restaurant.db`) or type a custom file path
-
-## How to Use the Application
-
-When the program starts, you will see a menu with the following options:
-
-| Option | Description |
-|--------|-------------|
-| 1 | View the full restaurant menu (sorted by ID) |
-| 2 | Search for a menu item by ID or name |
-| 3 | Add a new menu item to the menu |
-| 4 | Remove a menu item by ID |
-| 5 | Search menu items by category (Starters/Mains/Desserts/Drinks) |
-| 6 | Place a new customer order |
-| 7 | View all orders |
-| 8 | Update an order's status (Pending/Preparing/Out for Delivery/Completed) |
-| 9 | Save current data to the database |
-| 0 | Save and exit |
-
-## Running the Unit Tests
-1. Open the solution in Visual Studio
-2. Go to **Test → Run All Tests** (or press **Ctrl + R, A**)
-3. All 12 tests should pass with green ticks
-
-## Project Structure
+## Repository Structure
 
 ```
-Takeaway restaurant/
-├── MenuItem.cs            - Menu item data model
-├── BSTNode.cs             - Binary Search Tree node
-├── BinarySearchTree.cs    - BST with Insert, Search, Delete, Traversal
-├── Order.cs               - Customer order data model
-├── OrderBST.cs            - BST for storing orders
-├── DatabaseHelper.cs      - SQLite database read/write operations
-├── Program.cs             - Main entry point and console menu
-├── CreateDatabase.txt     - SQL statements for creating the database
+CST2550-TakeAwayRestaurant-Group-5/
 │
-TakeAwayRestaurant.Tests/
-├── BSTTests.cs            - MSTest unit tests for BST operations
+├── Takeaway restaurant/                  ← Main project folder
+│   │
+│   ├── TakeawayWeb/                      ← WEB APPLICATION (run this)
+│   │   ├── Program.cs                    ← App entry point — starts the web server
+│   │   ├── AIAgent.cs                    ← AI chat agent logic
+│   │   ├── BinarySearchTree.cs           ← Custom BST data structure
+│   │   ├── BSTNode.cs                    ← BST node class
+│   │   ├── MenuItem.cs                   ← MenuItem data class
+│   │   ├── Order.cs                      ← Order data class
+│   │   ├── OrderBST.cs                   ← BST for storing orders
+│   │   ├── DataBaseHelper.cs             ← SQLite read/write logic
+│   │   ├── Controllers/
+│   │   │   ├── AccountController.cs      ← Login and logout
+│   │   │   ├── AdminController.cs        ← Admin: menu management, orders
+│   │   │   ├── CustomerController.cs     ← Customer: browse, search, order
+│   │   │   ├── AIController.cs           ← AI chat endpoint (POST)
+│   │   │   └── HomeController.cs         ← Home page routing
+│   │   ├── Views/                        ← HTML pages for each controller
+│   │   │   ├── Account/Login.cshtml      ← Login page
+│   │   │   ├── Admin/                    ← Admin pages (dashboard, menu, orders)
+│   │   │   └── Customer/                 ← Customer pages (menu, order, AI chat)
+│   │   └── TakeawayWeb.csproj            ← Web app project file
+│   │
+│   ├── Takeaway restaurant/              ← ORIGINAL CONSOLE APPLICATION
+│   │   ├── Program.cs                    ← Console app entry point
+│   │   ├── BinarySearchTree.cs           ← BST implementation (console version)
+│   │   ├── BSTNode.cs                    ← BST node class
+│   │   ├── MenuItem.cs                   ← MenuItem class
+│   │   ├── Order.cs                      ← Order class
+│   │   ├── OrderBST.cs                   ← Order BST
+│   │   ├── DataBaseHelper.cs             ← Database helper
+│   │   └── CreateDatabase.txt            ← SQL statements to create the database
+│   │
+│   └── TakeAayRestaurant.tests/          ← UNIT TESTS (run these in Test Explorer)
+│       ├── BSTTests.cs                   ← All 12 MSTest unit tests for the BST
+│       ├── MSTestSettings.cs             ← Test configuration
+│       └── TakeAayRestaurant.tests.csproj← Test project file
+│
+├── MY_restaurant/                        ← WinForms login page (earlier prototype)
+│   ├── frmlogin.cs                       ← Login form logic
+│   └── frmlogin.Designer.cs              ← Login form UI design
+│
+├── screenshots/                          ← Diagrams and flowcharts
+│   ├── Flowcharts/
+│   │   ├── Flowchart.png                 ← Overall system flowchart
+│   │   ├── Login.png                     ← Login flowchart
+│   │   ├── Admin/                        ← Admin process flowcharts
+│   │   └── User/                         ← Customer process flowcharts
+│   └── errors.png                        ← Error handling screenshot
+│
+├── Use_case_diagram.png                  ← System use case diagram
+├── README.md                             ← This file
+└── Resturaunt_login.slnf                 ← Solution filter file
 ```
 
-## Database
-The application uses SQLite for persistent storage. On first run, a `restaurant.db` file is created automatically with sample menu data. The SQL statements used to create the database can be found in `CreateDatabase.txt`.
+---
 
-## Troubleshooting
+## Key Files Explained
 
-**"Microsoft.Data.Sqlite not found" error:**
-Go to Tools → NuGet Package Manager → Manage NuGet Packages for Solution → Search for Microsoft.Data.Sqlite → Install
+| File | What it does |
+|---|---|
+| `TakeawayWeb/Program.cs` | Starts the web application and registers services |
+| `TakeawayWeb/AIAgent.cs` | Rule-based AI chat agent — queries the live BST to answer customer questions |
+| `TakeawayWeb/BinarySearchTree.cs` | Custom BST — insert, delete, search, traversal algorithms |
+| `TakeawayWeb/DataBaseHelper.cs` | Reads and writes menu/order data to the SQLite database |
+| `TakeawayWeb/Controllers/AdminController.cs` | Handles all admin actions — menu management and order updates |
+| `TakeawayWeb/Controllers/CustomerController.cs` | Handles all customer actions — browsing, searching, ordering |
+| `TakeAayRestaurant.tests/BSTTests.cs` | 12 unit tests covering BST insert, delete, search, and traversal |
+| `Takeaway restaurant/CreateDatabase.txt` | SQL CREATE and INSERT statements for the database |
 
-**"pipe has ended" error when pushing to Git:**
-Make sure the `.gitignore` file is in place to exclude `.vs/`, `bin/`, and `obj/` folders. Go to View → Git Changes, unstage any `.vs` files, then try again.
+---
 
-**Build errors about decimal/string conversion:**
-Make sure `Price` in MenuItem.cs is declared as `public decimal Price { get; set; }` not `public string Price`.
+## How to Run the Unit Tests
+
+1. Open the solution in Visual Studio
+2. Go to **Test → Test Explorer**
+3. Click **Run All Tests**
+4. All 12 tests should pass
+
+---
+
+## How to Compile
+
+**Requirements:**
+- .NET 8.0 SDK or later
+- Visual Studio 2022 (or later)
+- No additional setup needed — SQLite is included via NuGet
+
+**Steps:**
+1. Clone or download the repository
+2. Open `Takeaway restaurant/Takeaway restaurant.sln` in Visual Studio
+3. Right-click the solution → **Restore NuGet Packages**
+4. Set `TakeawayWeb` as the startup project
+5. Press **F5** to build and run
